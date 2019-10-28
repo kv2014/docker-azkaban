@@ -1,0 +1,25 @@
+mysql:
+    image: mysql
+    restart: always
+    ports:
+        - "3306:3306"
+    environment:
+        - MYSQL_USER=azkaban
+        - MYSQL_PASSWORD=azkaban
+        - MYSQL_DATABASE=azkaban
+        - MYSQL_ROOT_PASSWORD=mysql
+
+executor:
+    image: azkaban-executor
+    restart: always
+    links:
+        - mysql
+
+webserver:
+    image: azkaban-webserver
+    restart: always
+    ports:
+        - "8443:8443"
+    links:
+        - executor:azkaban-executor
+        - mysql
